@@ -1,0 +1,810 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>TOSHE | Student Management System</title>
+
+    <!-- FONTS: Poppins (professional UI) + Fira Code (code accents) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', Arial, sans-serif;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background: #faebd8;
+            color: #333;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* ---------- CODE-FRAME ACCENTS ---------- */
+
+        .mono {
+            font-family: 'Fira Code', Consolas, 'Courier New', monospace;
+        }
+
+        .eyebrow {
+            display: inline-block;
+            font-family: 'Fira Code', Consolas, 'Courier New', monospace;
+            font-size: 14px;
+            font-weight: 500;
+            letter-spacing: 1px;
+            color: #f151a1;
+            margin-bottom: 12px;
+        }
+
+        ::selection {
+            background: #f151a1;
+            color: #ffffff;
+        }
+
+        ::-webkit-scrollbar {
+            width: 11px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #faebd8;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #B89484;
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #f151a1;
+        }
+
+        a:focus-visible,
+        button:focus-visible {
+            outline: 3px solid #fc4692;
+            outline-offset: 3px;
+        }
+
+        /* NAVBAR */
+
+        nav {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            height: 75px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 8%;
+            background: #B89484;
+            box-shadow: 0 4px 16px rgba(51, 65, 85, 0.20);
+        }
+
+        .logo {
+            font-size: 23px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            color: white;
+        }
+
+        .logo .brace {
+            font-family: 'Fira Code', Consolas, 'Courier New', monospace;
+            font-weight: 500;
+            color: #FFEBD0;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 25px;
+            align-items: center;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: white;
+            font-weight: 500;
+            padding: 10px 14px;
+            border-radius: 8px;
+            transition: background 0.25s ease, color 0.25s ease,
+                        transform 0.25s ease;
+        }
+
+        .nav-links a:hover {
+            background: #FFEBD0;
+            color: #334155;
+            transform: translateY(-2px);
+        }
+
+        .nav-links a.login-btn {
+            background: #f151a1;
+            color: white !important;
+            padding: 10px 18px;
+            border-radius: 8px;
+            box-shadow: 0 6px 16px rgba(241, 81, 161, 0.35);
+        }
+
+        .nav-links a.login-btn:hover {
+            background: #d4478e;
+            transform: translateY(-2px);
+        }
+
+        /* HERO */
+
+        .hero {
+            position: relative;
+            min-height: 600px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 40px;
+            padding: 70px 8%;
+            overflow: hidden;
+            background:
+                radial-gradient(rgba(184, 148, 132, 0.28) 1px, transparent 1px),
+                linear-gradient(135deg, #FFEBD0, #faebd8);
+            background-size: 24px 24px, 100% 100%;
+        }
+
+        /* Giant code braces floating behind the hero */
+
+        .hero::before,
+        .hero::after {
+            position: absolute;
+            z-index: 0;
+            font-family: 'Fira Code', Consolas, 'Courier New', monospace;
+            font-size: 260px;
+            font-weight: 600;
+            line-height: 1;
+            color: rgba(241, 81, 161, 0.10);
+            pointer-events: none;
+        }
+
+        .hero::before {
+            content: "{";
+            left: 2%;
+            top: 4%;
+        }
+
+        .hero::after {
+            content: "}";
+            right: 3%;
+            bottom: 2%;
+        }
+
+        .hero > * {
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-content {
+            max-width: 600px;
+        }
+
+        .hero-content .tag {
+            display: inline-block;
+            background: #eebed4;
+            color: #334155;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-family: 'Fira Code', Consolas, 'Courier New', monospace;
+            font-size: 13px;
+            letter-spacing: 0.5px;
+            margin-bottom: 22px;
+            box-shadow: 0 6px 16px rgba(184, 148, 132, 0.30);
+        }
+
+        .hero-content .tag b {
+            color: #f151a1;
+            font-weight: 600;
+            margin-right: 6px;
+        }
+
+        .hero h1 {
+            font-size: 52px;
+            font-weight: 700;
+            letter-spacing: -1px;
+            line-height: 1.1;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .hero h1 span {
+            color: #fc4692;
+        }
+
+        /* Gradient headline where supported (solid pink fallback above) */
+
+        @supports ((-webkit-background-clip: text) or (background-clip: text)) {
+            .hero h1 span {
+                background: linear-gradient(135deg, #fc4692, #f151a1);
+                -webkit-background-clip: text;
+                background-clip: text;
+                -webkit-text-fill-color: transparent;
+            }
+        }
+
+        .hero p {
+            font-size: 18px;
+            line-height: 1.75;
+            color: #64748b;
+            margin-bottom: 32px;
+        }
+
+        .buttons {
+            display: flex;
+            gap: 15px;
+        }
+
+        .buttons a {
+            transition: background 0.25s ease, color 0.25s ease,
+                        transform 0.25s ease, box-shadow 0.25s ease;
+        }
+
+        .primary-btn {
+            display: inline-block;
+            text-decoration: none;
+            background: #f151a1;
+            color: white;
+            padding: 14px 26px;
+            border-radius: 8px;
+            font-weight: 600;
+            box-shadow: 0 10px 22px rgba(241, 81, 161, 0.32);
+        }
+
+        .primary-btn:hover {
+            background: #d4478e;
+            transform: translateY(-3px);
+            box-shadow: 0 16px 30px rgba(241, 81, 161, 0.42);
+        }
+
+        .secondary-btn {
+            display: inline-block;
+            text-decoration: none;
+            background: white;
+            color: #f151a1;
+            padding: 14px 26px;
+            border-radius: 8px;
+            border: 1px solid #f151a1;
+            font-weight: 600;
+            box-shadow: 0 10px 22px rgba(51, 65, 85, 0.10);
+        }
+
+        .secondary-btn:hover {
+            background: #FFEBD0;
+            border-color: #B89484;
+            color: #B89484;
+            transform: translateY(-3px);
+        }
+
+        /* HERO CARD */
+
+        .hero-card {
+            width: 420px;
+            background: #CB8899;
+            padding: 26px 30px 30px;
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.35);
+            box-shadow: 0 22px 50px rgba(51, 65, 85, 0.28);
+        }
+
+        /* Editor-style title bar with traffic-light dots */
+
+        .hero-card h3 {
+            display: flex;
+            align-items: center;
+            margin-bottom: 22px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.35);
+            font-size: 17px;
+            letter-spacing: 0.5px;
+            color: white;
+        }
+
+        .hero-card h3::before {
+            content: "";
+            width: 11px;
+            height: 11px;
+            flex: none;
+            border-radius: 50%;
+            background: #f179ab;
+            box-shadow: 17px 0 0 #FFEBD0, 34px 0 0 #B89484;
+            margin-right: 40px;
+        }
+
+        .stat {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 14px 15px;
+            margin-bottom: 12px;
+            background: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(51, 65, 85, 0.08);
+            transition: transform 0.25s ease, box-shadow 0.25s ease;
+        }
+
+        .stat:hover {
+            transform: translateX(6px);
+            box-shadow: 0 8px 18px rgba(51, 65, 85, 0.14);
+        }
+
+        .stat-icon {
+            width: 45px;
+            height: 45px;
+            flex: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #FFEBD0;
+            border-radius: 10px;
+            font-family: 'Fira Code', Consolas, 'Courier New', monospace;
+            font-size: 17px;
+            font-weight: 600;
+            color: #f151a1;
+        }
+
+        .stat-text h4 {
+            color: #fa72b1;
+            font-size: 15px;
+            margin-bottom: 4px;
+        }
+
+        .stat-text p {
+            font-size: 13px;
+            color: #64748b;
+        }
+
+        /* FEATURES */
+
+        .features {
+            padding: 90px 8%;
+            text-align: center;
+            background: #ffffff;
+        }
+
+        .features h2 {
+            font-size: 34px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            margin-bottom: 12px;
+        }
+
+        .features > p {
+            color: #64748b;
+            margin-bottom: 45px;
+        }
+
+        .feature-container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 25px;
+        }
+
+        .feature {
+            padding: 34px 30px;
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 16px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease,
+                        border-color 0.3s ease;
+        }
+
+        .feature:hover {
+            transform: translateY(-6px);
+            border-color: #eebed4;
+            box-shadow: 0 16px 34px rgba(184, 148, 132, 0.30);
+        }
+
+        .feature-icon {
+            width: 62px;
+            height: 62px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 18px;
+            background: #eebed4;
+            border-radius: 14px;
+            font-family: 'Fira Code', Consolas, 'Courier New', monospace;
+            font-size: 22px;
+            font-weight: 600;
+            color: #f151a1;
+            transition: background 0.3s ease, color 0.3s ease,
+                        transform 0.3s ease;
+        }
+
+        .feature:hover .feature-icon {
+            background: #f151a1;
+            color: #ffffff;
+            transform: rotate(-6deg) scale(1.06);
+        }
+
+        .feature h3 {
+            margin-bottom: 10px;
+            font-size: 20px;
+            color: #fa72b1;
+        }
+
+        .feature p {
+            color: #64748b;
+            line-height: 1.65;
+        }
+
+        /* CTA */
+
+        .cta {
+            padding: 80px 8%;
+            text-align: center;
+            background: #f151a1;
+            color: #ffffff;
+            box-shadow: inset 0 10px 30px rgba(51, 65, 85, 0.12);
+        }
+
+        .cta .eyebrow {
+            color: #FFEBD0;
+            margin-bottom: 14px;
+        }
+
+        .cta h2 {
+            font-size: 36px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            margin-bottom: 15px;
+        }
+
+        .cta p {
+            margin-bottom: 30px;
+            color: #FFEBD0;
+        }
+
+        .cta a {
+            display: inline-block;
+            text-decoration: none;
+            background: #ffffff;
+            color: #f151a1;
+            padding: 15px 28px;
+            border-radius: 8px;
+            font-weight: 600;
+            box-shadow: 0 12px 26px rgba(51, 65, 85, 0.22);
+            transition: background 0.25s ease, transform 0.25s ease,
+                        box-shadow 0.25s ease;
+        }
+
+        .cta a:hover {
+            background: #FFEBD0;
+            color: #f151a1;
+            transform: translateY(-3px);
+        }
+
+        /* Terminal pill */
+
+        .cta-terminal {
+            display: inline-block;
+            margin-top: 26px;
+            padding: 12px 20px;
+            background: #334155;
+            color: #FFEBD0;
+            border-radius: 10px;
+            font-family: 'Fira Code', Consolas, 'Courier New', monospace;
+            font-size: 14px;
+            box-shadow: 0 12px 26px rgba(51, 65, 85, 0.35);
+        }
+
+        .cta-terminal .prompt {
+            color: #f179ab;
+            margin-right: 8px;
+        }
+
+        /* FOOTER */
+
+        footer {
+            background: #B89484;
+            color: #ffffff;
+            text-align: center;
+            padding: 34px 25px;
+            font-size: 14px;
+        }
+
+        footer .footer-code {
+            display: inline-block;
+            margin-bottom: 8px;
+            font-family: 'Fira Code', Consolas, 'Courier New', monospace;
+            font-size: 13px;
+            letter-spacing: 0.5px;
+            color: #FFEBD0;
+        }
+
+        /* RESPONSIVE */
+
+        @media (max-width: 900px) {
+
+            .hero {
+                flex-direction: column;
+                text-align: center;
+                gap: 50px;
+            }
+
+            .hero::before,
+            .hero::after {
+                display: none;
+            }
+
+            .buttons {
+                justify-content: center;
+            }
+
+            .feature-container {
+                grid-template-columns: 1fr;
+            }
+
+            .hero-card {
+                width: 100%;
+                max-width: 420px;
+            }
+        }
+
+        @media (max-width: 600px) {
+
+            nav {
+                padding: 0 5%;
+            }
+
+            .nav-links a:not(.login-btn) {
+                display: none;
+            }
+
+            .hero {
+                padding: 50px 5%;
+            }
+
+            .hero h1 {
+                font-size: 38px;
+            }
+
+            .cta-terminal {
+                font-size: 12px;
+                padding: 10px 14px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- NAVIGATION -->
+    <nav>
+
+        <div class="logo">
+            <span class="brace">{</span>StudentHub<span class="brace">}</span>
+        </div>
+
+        <div class="nav-links">
+
+            <a href="#features">
+                Features
+            </a>
+
+            <a href="#about">
+                About
+            </a>
+
+            <a href="dashboard.html" class="login-btn">
+                Dashboard
+            </a>
+
+        </div>
+
+    </nav>
+
+
+    <!-- HERO SECTION -->
+    <section class="hero">
+
+        <div class="hero-content">
+
+            <span class="tag">
+                <b>&lt;/&gt;</b> Student Management System
+            </span>
+
+            <h1>
+                Manage Your
+                <span>Students</span>
+                Easily
+            </h1>
+
+            <p>
+                Welcome to StudentHub, a simple and modern
+                student management system designed to help
+                you organize and manage student information
+                efficiently.
+            </p>
+
+            <div class="buttons">
+
+                <a href="{% url 'dashboard' %}" class="primary-btn">
+                    Get Started →
+                </a>
+
+                <a href="#features" class="secondary-btn">
+                    Learn More
+                </a>
+
+            </div>
+
+        </div>
+
+
+        <!-- DASHBOARD PREVIEW -->
+        <div class="hero-card">
+
+            <h3>
+                 Student Overview
+            </h3>
+
+            <div class="stat">
+
+                <div class="stat-icon">
+                    {}
+                </div>
+
+                <div class="stat-text">
+                    <h4>Student Records</h4>
+                    <p>Manage student information</p>
+                </div>
+
+            </div>
+
+            <div class="stat">
+
+                <div class="stat-icon">
+                    []
+                </div>
+
+                <div class="stat-text">
+                    <h4>Courses</h4>
+                    <p>Organize student courses</p>
+                </div>
+
+            </div>
+
+            <div class="stat">
+
+                <div class="stat-icon">
+                    #
+                </div>
+
+                <div class="stat-text">
+                    <h4>Student Information</h4>
+                    <p>Keep records organized</p>
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- FEATURES -->
+    <section class="features" id="features">
+
+        <span class="eyebrow">// features</span>
+
+        <h2>
+            Everything You Need
+        </h2>
+
+        <p>
+            Manage your student records in one place.
+        </p>
+
+
+        <div class="feature-container">
+
+            <div class="feature">
+
+                <div class="feature-icon">
+                    &lt;/&gt;
+                </div>
+
+                <h3>
+                    Student Management
+                </h3>
+
+                <p>
+                    Store and manage student information
+                    including names, IDs, courses, and
+                    contact details.
+                </p>
+
+            </div>
+
+
+            <div class="feature">
+
+                <div class="feature-icon">
+                    {}
+                </div>
+
+                <h3>
+                    Dashboard
+                </h3>
+
+                <p>
+                    View your student records and important
+                    statistics from one convenient dashboard.
+                </p>
+
+            </div>
+
+
+            <div class="feature">
+
+                <div class="feature-icon">
+                    []
+                </div>
+
+                <h3>
+                    Secure Records
+                </h3>
+
+                <p>
+                    Keep your student information organized
+                    and accessible through the management system.
+                </p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- CTA -->
+    <section class="cta" id="about">
+
+        <span class="eyebrow">// ready when you are</span>
+
+        <h2>
+            Ready to Manage Your Students?
+        </h2>
+
+        <p>
+            Access your student dashboard and start managing
+            your records today.
+        </p>
+
+        <a href="{% url 'dashboard' %}">
+            Open Dashboard →
+        </a>
+
+        <div class="cta-terminal" aria-hidden="true">
+            <span class="prompt">$</span> python manage.py runserver
+        </div>
+
+    </section>
+
+
+    <!-- FOOTER -->
+    <footer>
+
+        <p class="footer-code">
+            &lt;/&gt; built with Python, Django &amp; &hearts;
+        </p>
+
+        <p>
+            © 2026 StudentHub Student Management System.
+            All rights reserved.
+        </p>
+
+    </footer>
+
+</body>
+</html>
